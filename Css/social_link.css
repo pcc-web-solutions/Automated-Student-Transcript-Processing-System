@@ -1,0 +1,35 @@
+.social-icon-bar {
+    /*z-index: 111111;*/
+    position: fixed;
+	top: 8.5%;
+	/*margin-botom: 0px;*/
+    right: 0px;
+}
+.social-icon-bar a {
+    display: block;
+    text-align: center;
+    padding: 3px;
+    transition: all 0.3s ease;
+    color: white;
+    font-size: 25px;
+}
+.facebook {
+    background: #3B5998;
+    color: transparent;
+}
+.google {
+    background: #008000;
+    color: transparent;
+}
+.whatsapp {
+    background: #008000;
+    color: transparent;
+}
+.youtube {
+    background: #FF0000;
+    color: transparent;
+}
+.instagram {
+    background: brown;
+    color: transparent;
+}

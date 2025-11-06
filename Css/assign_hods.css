@@ -1,0 +1,58 @@
+  select.form-control{
+  /*
+	  border-color: transparent;
+	  background-color: transparent;*/
+	  width: 100%;
+  }
+  select.form-control:focus{/*
+	  border-color: transparent;
+	  background-color: transparent;*/
+  }
+    #ajax-response{
+    	margin-top: 10px;
+    }
+
+    button:hover{
+        cursor: pointer;
+    }
+    tr button{
+		width: 100%;
+	}
+    table{
+        width: 100%;
+    }
+    .search {
+    width: 200px;
+    transition: width 0.4s ease-in-out;
+    margin-bottom:10px
+    }
+	
+	tr{
+	line-height:20px;
+	min-height:15px;
+	height:15px;
+	border: 1px solid grey;
+	
+	}
+	tbody tr:nth-child(even){
+		background-color: lightcyan;
+	}
+	tr td,th{
+		border: 1px solid grey;
+	}
+	tr th{
+	line-height:20px;
+	min-height:15px;
+	height:15px;
+	background-color: cyan;
+	}
+	
+	.search:focus {
+	  width: 100%;
+	}
+	.search {
+	 width: 150px;
+	 transition: width 0.4s ease-in-out;
+	 margin-bottom:0px
+	}
+	

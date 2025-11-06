@@ -1,0 +1,93 @@
+<style>	
+    .search {
+		width: 200px;
+		transition: width 0.4s ease-in-out;
+		margin-bottom:10px
+    }
+	#search{
+		margin-bottom: 10px;
+	}
+	table{
+		border-collapse: collapse;
+		border-radius: 5px;
+		width: 100%;
+		border: 1px solid grey;
+		font-size: 12px;
+		margin-bottom: 10px;
+	}
+	tr td{
+		line-height:17px;
+		min-height:17px;
+		height:17px;
+	}
+	.col-sm-6,.col-sm-6, .col-sm-4, .col-md-4{
+		margin-bottom: 10px;
+	}
+	tbody tr,td{
+		border: 1.5px solid silver;
+	}
+	tbody tr:nth-child(even){
+		background-color: lightcyan;
+	}
+	tr th{
+		line-height:17px;
+		min-height:17px;
+		height:17px;
+		background-color: lightgray;
+		border: 1px solid silver;
+		color: white;
+	}
+	.hover-text:hover{
+		cursor: pointer;
+	}
+	.hover-text{
+		position: relative;
+	}
+	
+	.hover-text:before{
+		content: attr(data-hover);
+		visibility: hidden;
+		opacity: 0px;
+		width: fit-content;
+		background-color: grey;
+		color: #fff;
+		text-align: left;
+		border-radius: 5px;
+		padding: 5px 0;
+		transition: opacity 1s ease-in-out;
+		
+		position: absolute;
+		z-index: 1;
+		left: 0;
+		top: 110%;
+	}
+	.hover-text:hover:before{
+		opacity: 1;
+		visibility: visible;
+	}
+	<!-- -->
+	.search:focus {
+		width: 100%;
+	}
+	.search {
+		width: 150px;
+		transition: width 0.4s ease-in-out;
+		margin-bottom:0px
+	}
+	
+	.row{
+		margin-bottom: 10px;
+		margin-top: 10px;
+	}
+	/*.card{
+		width: fit-content;
+		margin: auto;
+	}*/
+	hr{
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	h6{
+		padding-top: 2px;
+	}
+</style>

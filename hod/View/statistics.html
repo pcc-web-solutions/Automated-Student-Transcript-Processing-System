@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Chart</title>
+	<style type="text/css">
+		@media print{
+			@page{size: A4 landscape;}
+			#letter_head:before{
+				content: url();
+			}
+		}
+	</style>
+	<script type="text/javascript">
+		function printcard(obj){
+			var card = obj.parentNode.parentNode
+			card.printElement()
+		}
+	</script>
+</head>
+<body>
+	<!-- <div id="letter_head"><img src="../images/letter_head.jpg" alt="college logo" width="100%" style="margin-right: 10%"></div> -->
+
+		<div class="card card-primary card-outline areaChart">
+      <div class="card-header">
+        <h3 class="card-title">Trainees per course</h3>
+        <div class="card-tools noprint">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-tool" data-card-widget="remove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+      	<canvas id="donutChart" style="max-width: 100%; height: inherit;"></canvas>
+      </div>
+      <div class="card-footer">
+      </div>
+    </div>
+
+		<div class="card card-warning card-outline areaChart">
+      <div class="card-header">
+        <h3 class="card-title">Pass Rate per Course</h3>
+        <div class="card-tools noprint">
+        	<button type="button" class="btn-xs btn-primary" onclick="window.print()">
+				    <i class="fa fa-print"></i> Print
+				  </button>
+          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-tool" data-card-widget="remove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="chart">
+          <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+        </div>
+      </div>
+      <div class="card-footer">
+      	<div class="row">
+          <div class="col-sm-2 col-6">
+            <div class="description-block border-left border-right">
+              <h5 class="description-header" id="distinctions"></h5>
+              <span class="description-text" style="text-transform: none;">Distinctions</span>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-2 col-6">
+            <div class="description-block border-right">
+              <h5 class="description-header" id="credits"></h5>
+              <span class="description-text" style="text-transform: none;">Credits</span>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-2 col-6">
+            <div class="description-block border-right">
+              <h5 class="description-header" id="passes"></h5>
+              <span class="description-text" style="text-transform: none;">Passes</span>
+            </div>
+          </div>
+          <div class="col-sm-2 col-6">
+            <div class="description-block border-right">
+              <h5 class="description-header" id="fails"></h5>
+              <span class="description-text" style="text-transform: none;">Fails</span>
+            </div>
+          </div>
+          <div class="col-sm-2 col-6">
+            <div class="description-block border-right">
+              <h5 class="description-header" id="reffers"></h5>
+              <span class="description-text" style="text-transform: none;">Reffers</span>
+            </div>
+          </div>
+          <div class="col-sm-2 col-6">
+            <div class="description-block border-right">
+              <h5 class="description-header" id="crnms"></h5>
+              <span class="description-text" style="text-transform: none;">C.R.N.Ms</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-info card-outline">
+      <div class="card-header">
+        <h3 class="card-title">Department session performance analysis</h3>
+
+        <div class="card-tools noprint">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-tool" data-card-widget="remove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="chart">
+          <canvas id="stackedBarChart" style="min-height: 250px; height: 350px; max-height: 350px; max-width: 100%;"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+<script type="text/javascript">
+	$(function(){
+		function toast(bg, body, title, subtitle){
+			$(document).Toasts('create', {
+				class: bg,
+	      body: body,
+	      title: title,
+	      subtitle: subtitle,
+	    })
+		}
+		// toast('bg-info', 'Body goes here', 'Title', 'Subtitle')
+		
+		$.ajax({
+			url: 'View/statistics.php',
+			method: 'POST',
+			data: {req:'course_data'},
+			dataType: 'json',
+			success: function(response){
+				var response = response.data;
+				var len = response.length;
+				var labels = [];
+				var datavalues = [];
+				for(var i=0; i<len; i++){
+					var course_code = response[i]['course_code'];
+					var abbreviation = response[i]['abbreviation'];
+					labels.push(abbreviation);
+					datavalues.push(response[i]['trainees']);
+				}
+				var barChartCanvas = $('#donutChart').get(0).getContext('2d')
+		    var barChartData = {
+					labels  : labels,
+					datasets: [
+						{
+						  label               : 'Trainees',
+						  backgroundColor     : 'magenta',
+						  borderColor         : 'magenta',
+						  pointRadius         : false,
+						  pointColor          : '#3b8bba',
+						  pointStrokeColor    : 'rgba(60,141,188,1)',
+						  pointHighlightFill  : '#fff',
+						  pointHighlightStroke: 'rgba(60,141,188,1)',
+						  data                : datavalues
+						},
+					]
+				}
+
+		    var barChartOptions = {
+		      responsive              : true,
+		      maintainAspectRatio     : true,
+		      datasetFill             : false,
+		    }
+
+		    new Chart(barChartCanvas, {
+		      type: 'bar',
+		      data: barChartData,
+		      options: barChartOptions,
+		    })
+			},
+			error: function(){
+				toastr.info("An error occured")
+			}
+		})
+
+		$.ajax({
+			url: 'View/statistics.php',
+			method: 'POST',
+			data: {req:'performance_analysis'},
+			dataType: 'json',
+			success: function(response){ 
+				if(response.status == 'success'){
+					var datavalues = response.analysis_data;
+
+					var courses = [];
+					var distinctions = [];
+					var credits = [];
+					var passes = [];
+					var reffers = [];
+					var crnms = [];
+					var passrates = [];
+					var failrates = [];
+					var len = datavalues.length;
+
+					for(var i = 0; i<len; i++){
+						courses.push(datavalues[i]['course_code']);
+						distinctions.push(datavalues[i]['distinctions']);
+						credits.push(datavalues[i]['credits']);
+						passes.push(datavalues[i]['passes']);
+						reffers.push(datavalues[i]['reffers']);
+						crnms.push(datavalues[i]['crnm']);
+						passrates.push(datavalues[i]['passrate']);
+						failrates.push(datavalues[i]['failrate']);
+					}
+
+					var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+				    var areaChartData = {
+				      labels  : courses,
+				      datasets: [
+				        {
+				          label               : 'Pass Rate',
+				          backgroundColor     : 'goldenrod',
+				          borderColor         : 'darkcyan',
+				          pointRadius         : true,
+				          pointColor          : '#3b8bba',
+				          pointStrokeColor    : 'rgba(60,141,188,1)',
+				          pointHighlightFill  : '#fff',
+				          pointHighlightStroke: 'rgba(60,141,188,1)',
+				          data                : passrates
+				        },
+				      ]
+				    }
+
+				    var areaChartOptions = {
+				      maintainAspectRatio : false,
+				      responsive : true,
+				      legend: {
+				        display: false
+				      },
+				      scales: {
+				        xAxes: [{
+				          gridLines : {
+				            display : true,
+				          }
+				        }],
+				        yAxes: [{
+				          gridLines : {
+				            display : true,
+				          }
+				        }]
+				      }
+				    }
+
+				    new Chart(areaChartCanvas, {
+				      type: 'line',
+				      data: areaChartData,
+				      options: areaChartOptions
+				    })
+
+
+						// var barChartCanvas = $('#barChart').get(0).getContext('2d')
+					  var barChartData = {
+							labels  : courses,
+							datasets: [
+								{
+								  label               : 'Distinction',
+								  backgroundColor     : 'green',
+								  borderColor         : 'green',
+								  pointRadius         : false,
+								  pointColor          : '#3b8bba',
+								  pointStrokeColor    : 'rgba(60,141,188,1)',
+								  pointHighlightFill  : '#fff',
+								  pointHighlightStroke: 'rgba(60,141,188,1)',
+								  data                : distinctions
+								},
+								{
+								  label               : 'Credit',
+								  backgroundColor     : 'gold',
+								  borderColor         : 'gold',
+								  pointRadius         : false,
+								  pointColor          : 'rgba(210, 214, 222, 1)',
+								  pointStrokeColor    : '#c1c7d1',
+								  pointHighlightFill  : '#fff',
+								  pointHighlightStroke: 'rgba(220,220,220,1)',
+								  data                : credits
+								},
+								{
+								  label               : 'Pass',
+								  backgroundColor     : 'copper',
+								  borderColor         : 'copper',
+								  pointRadius         : false,
+								  pointColor          : 'rgba(210, 214, 222, 1)',
+								  pointStrokeColor    : '#c1c7d1',
+								  pointHighlightFill  : '#fff',
+								  pointHighlightStroke: 'rgba(220,220,220,1)',
+								  data                : passes
+								},
+								{
+								  label               : 'Reffer',
+								  backgroundColor     : 'brown',
+								  borderColor         : 'brown',
+								  pointRadius         : false,
+								  pointColor          : 'rgba(210, 214, 222, 1)',
+								  pointStrokeColor    : '#c1c7d1',
+								  pointHighlightFill  : '#fff',
+								  pointHighlightStroke: 'rgba(220,220,220,1)',
+								  data                : reffers
+								},
+								{
+								  label               : 'Course Requirement Not Met',
+								  backgroundColor     : 'red',
+								  borderColor         : 'red',
+								  pointRadius         : false,
+								  pointColor          : 'rgba(210, 214, 222, 1)',
+								  pointStrokeColor    : '#c1c7d1',
+								  pointHighlightFill  : '#fff',
+								  pointHighlightStroke: 'rgba(220,220,220,1)',
+								  data                : crnms
+								},
+							]
+						}
+
+				    var barChartOptions = {
+				      responsive              : true,
+				      maintainAspectRatio     : true,
+				      datasetFill             : false,
+				    }
+
+				    var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
+				    var stackedBarChartData = $.extend(true, {}, barChartData)
+
+				    var stackedBarChartOptions = {
+				      responsive              : true,
+				      maintainAspectRatio     : false,
+				      scales: {
+				        xAxes: [{
+				          stacked: true,
+				        }],
+				        yAxes: [{
+				          stacked: true
+				        }]
+				      }
+				    }
+
+				    new Chart(stackedBarChartCanvas, {
+				      type: 'bar',
+				      data: stackedBarChartData,
+				      options: stackedBarChartOptions
+				    })
+
+				    document.getElementById('distinctions').innerText = response.gradeTotals[0]['distinctions'];
+				    document.getElementById('credits').innerText = response.gradeTotals[0]['credits'];
+				    document.getElementById('passes').innerText = response.gradeTotals[0]['passes'];
+				    document.getElementById('fails').innerText = response.gradeTotals[0]['fails'];
+				    document.getElementById('reffers').innerText = response.gradeTotals[0]['reffers'];
+				    document.getElementById('crnms').innerText = response.gradeTotals[0]['crnms'];
+				  }
+				  else{
+				  	toastr.warning(response.message)
+				  }
+			},
+			error: function(){
+				toastr.warning("Error sending request to server")
+			}
+		});
+
+	})
+</script>
+</body>
+</html>
